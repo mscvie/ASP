@@ -6,17 +6,47 @@ export default function Contacts({ contacts, changeChat }) {
   const [currentUserName, setCurrentUserName] = useState(undefined);
   const [currentUserImage, setCurrentUserImage] = useState(undefined);
   const [currentSelected, setCurrentSelected] = useState(undefined);
-  useEffect(async () => {
-    const data = await JSON.parse(
-      localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
-    );
-    setCurrentUserName(data.username);
-    setCurrentUserImage(data.avatarImage);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const data = JSON.parse(
+          localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+        );
+        if (data && data.username && data.avatarImage) {
+          setCurrentUserName(data.username);
+          setCurrentUserImage(data.avatarImage);
+        } else {
+          throw new Error("User data not found");
+        }
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
+    fetchUserData();
   }, []);
+
   const changeCurrentChat = (index, contact) => {
     setCurrentSelected(index);
     changeChat(contact);
   };
+
+  if (error) {
+    return (
+      <Container>
+        <div className="brand">
+          <img src={Logo} alt="logo" />
+          <h3>snappy</h3>
+        </div>
+        <div className="error">
+          <h2>{error}</h2>
+        </div>
+      </Container>
+    );
+  }
+
   return (
     <>
       {currentUserImage && currentUserImage && (

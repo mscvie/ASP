@@ -15,7 +15,7 @@ Both should be installed.
 
 This repository provides example environment (.env.example) files which you can use. To use them you need to rename them from ``.env.example`` to ``.env``
 ```shell
-cd public
+cd website
 mv .env.example .env
 cd ..
 cd server
