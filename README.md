@@ -35,7 +35,7 @@ npm i
 ### Run a MongoDB instance
 Start a mongoDB instance, either installing it on your pc or using the docker platform to run a MongoDB image/container.
 
->Note: **Update the MONGO_URL inside ``/server/.env`` accordingly!**
+>Note: **Update the MONGO_URL inside ``/server/.env`` accordingly, if necessary!**
 
 ### Run the Backend Server and Website
 To run the backend (Flask) app:
@@ -43,7 +43,7 @@ To run the backend (Flask) app:
 
 ```shell
 cd backend-server
-npm python index.py
+python index.py
 ```
 
 For Frontend:
