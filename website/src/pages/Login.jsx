@@ -43,20 +43,37 @@ export default function Login() {
     event.preventDefault();
     if (validateForm()) {
       const { username, password } = values;
-      const { data } = await axios.post(loginRoute, {
-        username,
-        password,
-      });
-      if (data.status === false) {
-        toast.error(data.msg, toastOptions);
-      }
-      if (data.status === true) {
-        localStorage.setItem(
-          process.env.REACT_APP_LOCALHOST_KEY,
-          JSON.stringify(data.user)
-        );
 
-        navigate("/");
+      try {
+        const { data } = await axios.post(loginRoute, {
+          username,
+          password,
+        });
+        console.log(data)
+        if (data.status === false) {
+          toast.error(data.msg, toastOptions);
+        }
+        if (data.status === true) {
+          localStorage.setItem(
+            process.env.REACT_APP_LOCALHOST_KEY,
+            JSON.stringify(data.user)
+          );
+  
+          navigate("/");
+        }
+      } catch (error) {
+        if (error.response) {
+          const { status, data } = error.response;
+          if (status === 400) {
+            toast.error(data.msg || 'Bad Request', toastOptions);
+          } else {
+            // Handle other status codes or generic error
+            toast.error(data.msg || 'An error occurred', toastOptions);
+          }
+        } else {
+          // The request was made but no response was received
+          toast.error('Network Error', toastOptions);
+        }
       }
     }
   };
