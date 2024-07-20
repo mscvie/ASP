@@ -5,47 +5,51 @@ Snappy is a chat application build with the power of MERN (MongoDB, Express, Rea
 
 ![home page](./images/snappy.png)
 
-## Installation Guide
+## Install and Run Snappy App
 
 ### Requirements
 - [Nodejs](https://nodejs.org/en/download)
 - [Mongodb](https://www.mongodb.com/docs/manual/administration/install-community/)
 
-Both should be installed. 
+Both should be installed. You can also use a container running MongoDB on Docker.
 
 This repository provides example environment (.env.example) files which you can use. To use them you need to rename them from ``.env.example`` to ``.env``
 ```shell
 cd website
 mv .env.example .env
 cd ..
-cd server
+cd backend-server
 mv .env.example .env
 cd ..
 ```
 
->Note: **Make sure a MongoDB server is running and update ``/server/.env`` the MONGO_URL accordingly.**
-
 Now install the dependencies for backend and frontend.
 ```shell
-cd server
-npm i
+cd backend-server
+pip install -r requirements.txt
 cd ..
-cd public
+cd website
 npm i
 ```
-We are almost done, Now just start the development server.
 
-For Frontend.
+### Run a MongoDB instance
+Start a mongoDB instance, either installing it on your pc or using the docker platform to run a MongoDB image/container.
+
+>Note: **Update the MONGO_URL inside ``/server/.env`` accordingly!**
+
+### Run the Backend Server and Website
+To run the backend (Flask) app:
+
+
 ```shell
-cd public
+cd backend-server
+npm python index.py
+```
+
+For Frontend:
+```shell
+cd website
 npm start
 ```
-For Backend.
 
-Open another terminal in folder, Also make sure mongodb is running in background.
-```shell
-cd server
-npm start
-```
-
-Done! Now open localhost:3000 in your browser.
+Done! Now open localhost:3000 in your browser and test the app.
