@@ -3,6 +3,8 @@ import json
 from bson.objectid import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
 from models.user_model import User  # Import the User model from models/user_model.py
+from session_manager import session_manager
+from socketio_instance import socketio
 
 def login():
     try:
@@ -78,13 +80,9 @@ def set_avatar(id):
 
 def log_out(id):
     try:
-        if not id:
-            return jsonify({"msg": "User id is required "}), 400
-        
-        # Remove user from onlineUsers
-        if id in online_users:
-            del online_users[id]
-        
-        return jsonify({"msg": "User logged out successfully"}), 200
+        socket_sid = session_manager.remove_user(id)  # Get and remove the Socket.IO session ID
+        if socket_sid:
+            socketio.disconnect(sid=socket_sid)   # Disconnect the user from SocketIO
+        return jsonify({"status": "success", "message": "Logged out successfully"}), 200
     except Exception as ex:
         return jsonify({"msg": str(ex)}), 500
