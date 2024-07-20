@@ -11,10 +11,12 @@ load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
-socketio = SocketIO(app, cors_allowed_origins="http://localhost:3000", logger=True, engineio_logger=True)
+# socketio = SocketIO(app, cors_allowed_origins="http://localhost:3000", logger=True, engineio_logger=True)
+socketio = SocketIO(app, cors_allowed_origins="*", logger=True, engineio_logger=True)
 
 # Database connection
-connect(db='your_db_name', host=os.getenv("MONGO_URL"))
+connection = connect(db='your_db_name', host=os.getenv("MONGO_URL"))
+print(f"db connection: {connection}")
 
 # Register routes
 register_routes(app)
@@ -37,6 +39,7 @@ def handle_connect():
 @socketio.on('add-user')
 def handle_add_user(data):
     try:
+      print(f"####### add-user ###########")
       print(f"printing the data: \n{data}\n\n {request.sid}")
       user_id = data
       online_users[user_id] = request.sid

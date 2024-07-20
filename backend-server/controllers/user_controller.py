@@ -1,4 +1,5 @@
 from flask import jsonify, request
+import json
 from bson.objectid import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
 from models.user_model import User  # Import the User model from models/user_model.py
@@ -36,14 +37,24 @@ def register():
         user.save()
         
         user.password = None  # Remove password from response for security
-        return jsonify({"status": True, "user": user.to_json()}), 201
+        # Transform the JSON to valid frontend format
+        transformed_json = transform_json(user.to_json())
+
+        return jsonify({"status": True, "user": transformed_json}), 201
     except Exception as ex:
         return jsonify({"msg": str(ex)}), 500
+    
+# Function to transform the JSON - strange format created in python mongoose
+def transform_json(input_json):
+    input_json = json.loads(input_json)
+    output_json = input_json.copy()
+    output_json["_id"] = input_json["_id"]["$oid"]
+    return output_json
 
 def get_all_users(id):
     try:
-        users = User.objects.exclude(id=ObjectId(id)).only('email', 'username', 'avatarImage')
-        users_list = [{"email": user.email, "username": user.username, "avatarImage": user.avatarImage} for user in users]
+        users = User.objects.filter(id__ne=ObjectId(id)).only('email', 'username', 'avatarImage')
+        users_list = [{"_id": str(user.id), "email": user.email, "username": user.username, "avatarImage": user.avatarImage} for user in users]
         return jsonify(users_list), 200
     except Exception as ex:
         return jsonify({"msg": str(ex)}), 500

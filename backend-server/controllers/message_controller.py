@@ -1,4 +1,5 @@
 from flask import jsonify, request
+from datetime import datetime
 from models.message_model import Message
 from models.user_model import User
 
@@ -21,7 +22,8 @@ def add_message():
       message = Message(
           text=message_text,
           users=recipients,
-          sender=sender
+          sender=sender,
+          timestamp=datetime.utcnow()
       )
       message.save()
 
@@ -30,7 +32,7 @@ def add_message():
     except Exception as ex:
         return jsonify({"msg": str(ex)}), 500
 
-def get_messages(from_user_id, to_user_id):
+def get_messages():
     try:
         from_user_id = request.json.get('from')
         to_user_id = request.json.get('to')
