@@ -75,8 +75,6 @@ export default function Register() {
         toast.error(data.msg, toastOptions);
       }
       if (data.status === true) {
-        console.log("returned data from server")
-        console.log(data)
         localStorage.setItem(
           process.env.REACT_APP_LOCALHOST_KEY,
           JSON.stringify(data.user)
