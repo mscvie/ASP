@@ -84,8 +84,10 @@ def set_avatar(id):
 def log_out(id):
     try:
         socket_sid = session_manager.remove_user(id)  # Get and remove the Socket.IO session ID
+        print(socket_sid)
         if socket_sid:
-            socketio.disconnect(sid=socket_sid)   # Disconnect the user from SocketIO
+            socketio.emit('disconnect-me', room=socket_sid)
+            #socketio.disconnect(sid=socket_sid)   # Disconnect the user from SocketIO
         return jsonify({"status": "success", "message": "Logged out successfully"}), 200
     except Exception as ex:
         return jsonify({"msg": str(ex)}), 500
