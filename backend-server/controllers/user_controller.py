@@ -17,7 +17,10 @@ def login():
             return jsonify({"msg": "Incorrect Username or Password", "status": False}), 400
         
         user.password = None  # Remove password from response for security
-        return jsonify({"status": True, "user": user.to_json()}), 200
+        # Transform the JSON to valid frontend format
+        transformed_json = transform_json(user.to_json())
+
+        return jsonify({"status": True, "user": transformed_json}), 200
     except Exception as ex:
         return jsonify({"msg": str(ex)}), 500
 

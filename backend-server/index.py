@@ -4,7 +4,7 @@ from flask_socketio import SocketIO
 from mongoengine import connect
 from dotenv import load_dotenv
 import os
-import session_manager
+from session_manager import session_manager
 from socketio_instance import socketio
 
 from routes import register_routes
@@ -21,7 +21,7 @@ connection = connect(db='your_db_name', host=os.getenv("MONGO_URL"))
 register_routes(app)
 
 # Initialize SocketIO with the Flask app
-socketio.init_app(app)
+socketio.init_app(app, cors_allowed_origins="*")
 
 @socketio.on('connect')
 def handle_connect():
