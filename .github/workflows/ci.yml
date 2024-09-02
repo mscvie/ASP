@@ -9,7 +9,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     defaults:
-      working-directory: backend-server
+      working-directory: /home/mscvie/ASP/AbschlussprojektCloud2023/backend-server
 
     steps:
       - name: Checkout repository
